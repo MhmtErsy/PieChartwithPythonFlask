@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+<title>{% block title %} Buraya Yeni Başlık Gelecek {% endblock %}</title>
+{% block content %}
+<div class="container-fluid">
+    <center><h1><u>Device List</u></h1></center>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Device Name</th>
+      <th scope="col">Log Count</th>
+        <th scope="col">Total Count</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for key,value in data['devices'].items() %}
+    <tr id="logs">
+        <td id="device"><b>{{ key }}</b></td>
+        <td id="count"><b>{{ value }}</b></td>
+        <td bgcolor="#6495ed" id="topv"><u><b>{{topv}}</b></u></td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+    <p id="dic"></p>
+<br>
+    <center><div id="chartContainer" style="height: 500px; width: 50%;"></div></center>
+
+
+    <script>
+
+        window.onload = function() {
+            topcnt = (document.getElementById('topv').innerText)
+            var points = []
+            $("table tr#logs ").each(function (i) {
+                var tmp_d;
+                $("td#device", this).each(function (j) {
+                    tmp_d = $(this).text()
+                });
+                $("td#count", this).each(function (j) {
+                    percent = parseInt($(this).text()) * 100 / topcnt
+                    points.push({y: percent , label: tmp_d})
+                });
+            });
+
+
+            var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title: {
+                    text: "Count of logs per Device"
+                },
+                data: [{
+                    type: "pie",
+                    startAngle: 240,
+                    yValueFormatString: "##0.00\"%\"",
+                    indexLabel: "{label} {y}",
+                    dataPoints: points
+                }]
+            });
+            chart.render();
+        }
+
+  </script>
+
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</div>
+    {% endblock %}
