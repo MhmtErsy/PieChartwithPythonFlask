@@ -11,12 +11,11 @@ def anasayfa():
                  'HP': 2006,
                  }
             }
-    datajs = json.dumps(data)
     topv = 0
     for key,value in data['devices'].items():
         topv += value
 
-    return render_template("home.html",data=data,topv=topv,datajs=datajs)
+    return render_template("home.html",data=data,topv=topv)
 
 
 if __name__ == '__main__':
